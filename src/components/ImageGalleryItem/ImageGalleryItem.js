@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import s from "./ImageGalleryItem.module.css";
 
 const ImageGalleryItem = ({ id, webformatURL }) => {
   return (
-    <li className="ImageGalleryItem" key={id}>
-      <img src={webformatURL} alt="" className="ImageGalleryItem-image" />
+    <li className={s.ImageGalleryItem} key={id}>
+      <img src={webformatURL} alt="" className={s["ImageGalleryItem-image"]} />
     </li>
   );
 };

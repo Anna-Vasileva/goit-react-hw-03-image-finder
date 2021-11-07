@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ImageGalleryItem from "../ImageGalleryItem";
+import s from "./ImageGallery.module.css";
 
 const ImageGallery = ({ gallery }) => {
   return (
-    <ul className="ImageGallery">
+    <ul className={s.ImageGallery}>
       {gallery.map(({ id, webformatURL }) => {
         return <ImageGalleryItem id={id} webformatURL={webformatURL} />;
       })}
