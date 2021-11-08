@@ -5,7 +5,11 @@ import s from "./ImageGalleryItem.module.css";
 const ImageGalleryItem = ({ id, webformatURL }) => {
   return (
     <li className={s.ImageGalleryItem} key={id}>
-      <img src={webformatURL} alt="" className={s["ImageGalleryItem-image"]} />
+      <img
+        src={webformatURL}
+        alt="изображение pixabay"
+        className={s["ImageGalleryItem-image"]}
+      />
     </li>
   );
 };

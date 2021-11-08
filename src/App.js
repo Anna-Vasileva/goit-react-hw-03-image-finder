@@ -3,6 +3,8 @@ import Searchbar from "./components/Searchbar";
 import ImageGallery from "./components/ImageGallery";
 import Button from "./components/Button";
 import "./App.css";
+import Loader from "./components/Loader";
+import Modal from "./components/Modal";
 
 const INITIAL_STATE = { page: 1, gallery: null };
 const KEY = "23417274-c745cca46d265f1806e9566e8";
@@ -13,6 +15,8 @@ class App extends Component {
     ...INITIAL_STATE,
     isLoading: false,
     query: "",
+    // showModal: false,
+    showModal: true,
   };
   componentDidMount() {
     // fetch(`${baseUrl}?api_key=${apiKey}&page=${this.state.page}`)
@@ -47,6 +51,9 @@ class App extends Component {
             : { gallery: [...prevState.gallery, ...pictures.hits] };
         });
       })
+      .catch((err) => {
+        console.log(err);
+      })
       .finally(() => {
         this.setState({ isLoading: false });
       });
@@ -56,14 +63,32 @@ class App extends Component {
     page += 1;
     this.setState({ page });
   };
+  toggleModal = () => {
+    this.setState((showModal) => ({ showModal: !showModal }));
+  };
+  scroll = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+  };
   render() {
+    const { isLoading, gallery, showModal } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.changeInputData} />
 
-        {this.state.gallery && <ImageGallery gallery={this.state.gallery} />}
-        {this.state.gallery && <Button onClick={this.incrementPage} />}
-        {/* {isLoading && <Loader />} */}
+        {gallery && <ImageGallery gallery={gallery} />}
+        {gallery && <Button onClick={this.incrementPage} />}
+        {isLoading && <Loader />}
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img
+              src="https://image.tmdb.org/t/p/w400/zZMebBIsNipjFhJFv0zjm0KQaBF.jpg"
+              alt="изображение pixabay"
+            />
+          </Modal>
+        )}
       </>
     );
   }
