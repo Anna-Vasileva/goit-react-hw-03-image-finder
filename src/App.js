@@ -15,8 +15,10 @@ class App extends Component {
     ...INITIAL_STATE,
     isLoading: false,
     query: "",
-    // showModal: false,
-    showModal: true,
+    showModal: false,
+    largeImageURL: "",
+
+    // showModal: true,
   };
   componentDidMount() {
     // fetch(`${baseUrl}?api_key=${apiKey}&page=${this.state.page}`)
@@ -33,6 +35,9 @@ class App extends Component {
     if (prevState.page !== this.state.page) {
       this.getImages();
     }
+    // if (prevState.showModal !== this.state.showModal) {
+
+    // }
   }
   changeInputData = (data) => {
     this.setState({ query: data.inputData });
@@ -52,10 +57,13 @@ class App extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Что-то пошло не так");
       })
       .finally(() => {
         this.setState({ isLoading: false });
+        if (this.state.page > 1) {
+          this.scroll();
+        }
       });
   };
   incrementPage = () => {
@@ -64,7 +72,17 @@ class App extends Component {
     this.setState({ page });
   };
   toggleModal = () => {
-    this.setState((showModal) => ({ showModal: !showModal }));
+    // this.setState((showModal) => ({ showModal: !showModal }));
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+  onClickPicture = (e) => {
+    const newLargeImageURL = e.currentTarget.getAttribute("data-large-img");
+    if (e.currentTarget.hasAttribute("data-list")) {
+      this.toggleModal();
+      this.setState(() => ({
+        largeImageURL: newLargeImageURL,
+      }));
+    }
   };
   scroll = () => {
     window.scrollTo({
@@ -73,18 +91,24 @@ class App extends Component {
     });
   };
   render() {
-    const { isLoading, gallery, showModal } = this.state;
+    const { isLoading, gallery, showModal, largeImageURL } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.changeInputData} />
 
-        {gallery && <ImageGallery gallery={gallery} />}
+        {gallery && (
+          <ImageGallery
+            gallery={gallery}
+            onClickPicture={this.onClickPicture}
+          />
+        )}
         {gallery && <Button onClick={this.incrementPage} />}
         {isLoading && <Loader />}
         {showModal && (
           <Modal onClose={this.toggleModal}>
             <img
-              src="https://image.tmdb.org/t/p/w400/zZMebBIsNipjFhJFv0zjm0KQaBF.jpg"
+              // src="https://image.tmdb.org/t/p/w400/zZMebBIsNipjFhJFv0zjm0KQaBF.jpg"
+              src={largeImageURL}
               alt="изображение pixabay"
             />
           </Modal>

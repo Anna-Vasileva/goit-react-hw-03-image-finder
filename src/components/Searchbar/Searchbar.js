@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import s from "./Searchbar.module.css";
+import PropTypes from "prop-types";
 
 class Searchbar extends Component {
   state = {
     inputData: "",
+  };
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
   };
   changeValue = (event) => {
     this.setState({ inputData: event.currentTarget.value });
