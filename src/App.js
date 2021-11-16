@@ -5,6 +5,7 @@ import Button from "./components/Button";
 import "./App.css";
 import Loader from "./components/Loader";
 import Modal from "./components/Modal";
+import mapper from "./helpers/mapper";
 
 const INITIAL_STATE = { page: 1, gallery: null };
 const KEY = "23417274-c745cca46d265f1806e9566e8";
@@ -50,16 +51,19 @@ class App extends Component {
     )
       .then((res) => res.json())
       .then((pictures) => {
+        // console.log(pictures);
         this.setState((prevState) => {
           return !prevState.gallery
-            ? { gallery: pictures.hits }
-            : { gallery: [...prevState.gallery, ...pictures.hits] };
+            ? { gallery: mapper(pictures.hits) }
+            : { gallery: [...prevState.gallery, ...mapper(pictures.hits)] };
         });
       })
       .catch((err) => {
         console.log("Что-то пошло не так");
       })
       .finally(() => {
+        // console.log(this.state.page);
+        // console.log(this.state.gallery);
         this.setState({ isLoading: false });
         if (this.state.page > 1) {
           this.scroll();
