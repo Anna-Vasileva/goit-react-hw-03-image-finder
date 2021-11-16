@@ -30,6 +30,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query) {
       // this.setState({ page: 1 });
+      //ниже сбрасывает страницу при новом query
       this.setState({ ...INITIAL_STATE, query: this.state.query });
       this.getImages();
     }
@@ -63,10 +64,13 @@ class App extends Component {
       })
       .finally(() => {
         // console.log(this.state.page);
-        // console.log(this.state.gallery);
+        console.log(this.state.gallery);
         this.setState({ isLoading: false });
         if (this.state.page > 1) {
           this.scroll();
+        }
+        if (this.state.gallery.length === 0) {
+          this.setState({ ...INITIAL_STATE });
         }
       });
   };
