@@ -28,21 +28,22 @@ class App extends Component {
     // this.getImages();
   }
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !== this.state.query) {
-      // this.setState({ page: 1 });
-      //ниже сбрасывает страницу при новом query
-      this.setState({ ...INITIAL_STATE, query: this.state.query });
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
+      // this.setState({ ...INITIAL_STATE, query: this.state.query });
       this.getImages();
     }
-    if (prevState.page !== this.state.page) {
-      this.getImages();
-    }
+    // if (prevState.page !== this.state.page) {
+    //   this.getImages();
+    // }
     // if (prevState.showModal !== this.state.showModal) {
 
     // }
   }
   changeInputData = (data) => {
-    this.setState({ query: data.inputData });
+    this.setState({ ...INITIAL_STATE, query: data.inputData });
   };
   getImages = () => {
     // if (!this.state.query) return;
@@ -52,7 +53,8 @@ class App extends Component {
     )
       .then((res) => res.json())
       .then((pictures) => {
-        // console.log(pictures);
+        // console.log(this.state.page);
+        // console.log(this.state.gallery);
         this.setState((prevState) => {
           return !prevState.gallery
             ? { gallery: mapper(pictures.hits) }
@@ -63,8 +65,8 @@ class App extends Component {
         console.log("Что-то пошло не так");
       })
       .finally(() => {
-        // console.log(this.state.page);
-        console.log(this.state.gallery);
+        // console.log('finally');
+        // console.log("finally", this.state.gallery);
         this.setState({ isLoading: false });
         if (this.state.page > 1) {
           this.scroll();
